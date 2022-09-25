@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.sound.midi.Receiver;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class Feedback {
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "feedback_time", updatable = false, nullable = false)
-    private LocalDate feedbackTime;
+    private LocalDateTime feedbackTime;
 
     @Column(length = 500, nullable = false)
     private String comment;

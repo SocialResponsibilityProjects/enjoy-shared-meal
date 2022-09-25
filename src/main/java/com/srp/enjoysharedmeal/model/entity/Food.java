@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
