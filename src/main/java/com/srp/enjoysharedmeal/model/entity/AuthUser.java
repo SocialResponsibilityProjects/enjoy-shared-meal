@@ -1,17 +1,15 @@
 package com.srp.enjoysharedmeal.model.entity;
 
+import com.srp.enjoysharedmeal.model.type.Role;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -32,10 +30,7 @@ public class AuthUser {
     @Size(min = 5, message = "Minimum password length: 5 characters")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles", joinColumns = {
-            @JoinColumn(name = "user_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_id")})
-    public List<Role> roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
 }

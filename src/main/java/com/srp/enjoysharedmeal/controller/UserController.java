@@ -33,12 +33,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody @Valid UserRegisterDTO user) {
-        ModelMapper modelMapper = new ModelMapper();
-        return userService.signUp(modelMapper.map(user, User.class));
+    public String signup(@RequestBody @Valid UserRegisterDTO userDataDTO) {
+        User user = new User();
+        user.setUsername(userDataDTO.getUsername());
+        user.setPassword(userDataDTO.getPassword());
+        return userService.signup(user, false);
     }
 
-    @DeleteMapping(value = "/{username}")
+    @DeleteMapping(value = "/delete/{username}")
     public String delete(@PathVariable String username) {
         userService.delete(username);
         return username;

@@ -1,10 +1,9 @@
 package com.srp.enjoysharedmeal.service;
 
 import com.srp.enjoysharedmeal.model.entity.AuthUser;
-import com.srp.enjoysharedmeal.model.entity.Role;
 import com.srp.enjoysharedmeal.model.entity.User;
+import com.srp.enjoysharedmeal.model.type.Role;
 import com.srp.enjoysharedmeal.security.JwtTokenProvider;
-import com.srp.enjoysharedmeal.security.RoleRepository;
 import com.srp.enjoysharedmeal.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,15 +14,12 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -45,12 +41,11 @@ public class UserService {
         }
     }
 
-    public String signUp(User user) {
+    public String signup(User user, boolean isAdmin) {
         if (!userRepository.existsByUsername(user.getUsername())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            Optional<Role> defaultRole = roleRepository.findById(2);
-            Role clientRole = defaultRole.orElseThrow(() -> new RuntimeException("No such Role!"));
-            user.setRoles(Collections.singletonList(clientRole));
+            Role role = isAdmin ? Role.ROLE_ADMIN : Role.ROLE_CLIENT;
+            user.setRoles(Collections.singletonList(role));
             userRepository.save(user);
             return jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
         } else {
@@ -60,14 +55,10 @@ public class UserService {
 
     public void delete(String username) {
         AuthUser byUsername = findByUsername(username);
-        if (isAdmin(byUsername)) {
-            throw new RuntimeException("Related user can not be deleted!");
+        if (byUsername.getRoles().contains(Role.ROLE_ADMIN)) {
+            throw new RuntimeException("No permission to delete user : " + username);
         }
         userRepository.deleteByUsername(username);
-    }
-
-    private boolean isAdmin(AuthUser user) {
-        return user.getRoles().stream().anyMatch(role -> role.getRole_name().equals("ADMIN"));
     }
 
     public AuthUser search(String username) {

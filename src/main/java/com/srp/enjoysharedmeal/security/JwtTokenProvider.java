@@ -1,15 +1,13 @@
 package com.srp.enjoysharedmeal.security;
 
 
-
-import com.srp.enjoysharedmeal.model.entity.Role;
+import com.srp.enjoysharedmeal.model.type.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,10 +42,8 @@ public class JwtTokenProvider {
     public String createToken(String username, List<Role> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth",
-                roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
-                        .filter(Objects::nonNull).collect(Collectors.toList())
-        );
+        claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority()))
+                .filter(Objects::nonNull).collect(Collectors.toList()));
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
