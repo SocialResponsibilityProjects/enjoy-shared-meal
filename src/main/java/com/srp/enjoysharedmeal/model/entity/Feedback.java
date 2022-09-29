@@ -5,8 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.sound.midi.Receiver;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -18,28 +26,29 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "feedback")
 public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "feedback_time", updatable = false, nullable = false)
-    private LocalDateTime feedbackTime;
 
     @Column(length = 500, nullable = false)
     private String comment;
 
     @Min(1)
     @Max(5)
-    private int vote;
+    private int score;
 
-    @ManyToOne
-    private Sharer sharer;
+    @OneToOne
+    private User sharedBy;
 
-    @ManyToOne
-    private Receiver receiver;
+    @CreationTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
-    @ManyToOne
-    private Food food;
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(name = "updated_at", updatable = false, nullable = false)
+    private LocalDateTime updatedAt;
+
 }
