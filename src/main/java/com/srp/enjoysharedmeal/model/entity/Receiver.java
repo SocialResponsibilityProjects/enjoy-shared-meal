@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 
@@ -15,16 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "sharer")
-public class Sharer extends BaseUser {
-
-    @OneToOne
-    private Location location;
+@Table(name = "reciever")
+public class Receiver extends BaseUser {
 
     @OneToMany
-    private List<Food> sharedFoods;
+    private List<Food> receivedFoods;
 
     @OneToMany
     private List<Feedback> feedbacks;
-
 }

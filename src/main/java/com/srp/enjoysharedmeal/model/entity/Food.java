@@ -1,6 +1,7 @@
 package com.srp.enjoysharedmeal.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.srp.enjoysharedmeal.model.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,10 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "food")
-public class Food {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Food extends BaseEntity {
+
 
     @Column(length = 100, nullable = false)
     private String name;
@@ -34,6 +33,8 @@ public class Food {
     @ManyToOne
     private Sharer sharer;
 
-    //    private List<Feedback> feedbacks;
-    //    private List<Receiver> receivers;
+    @ManyToOne
+    private Receiver receiver;
+
+
 }

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.management.relation.Role;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.persistence.*;
 import java.util.List;
@@ -13,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public class BaseUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public abstract class BaseUser extends BaseEntity{
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -28,4 +27,10 @@ public class BaseUser {
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @Pattern(regexp = "(05)([0-9]{2})\\s?([0-9]{3})\\s?([0-9]{2})\\s?([0-9]{2})")
+    @Column(unique = true)
+    @NotBlank(message = "Phone number cannot be blank")
+    private String phoneNumber;
+
 }

@@ -1,5 +1,6 @@
 package com.srp.enjoysharedmeal.model.entity;
 
+import com.srp.enjoysharedmeal.model.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "location")
-public class Location {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Location extends BaseEntity {
 
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
 
 }

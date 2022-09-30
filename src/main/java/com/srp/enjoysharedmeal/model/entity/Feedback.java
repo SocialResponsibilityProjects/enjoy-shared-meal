@@ -1,6 +1,8 @@
 package com.srp.enjoysharedmeal.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.srp.enjoysharedmeal.model.base.BaseEntity;
+import com.srp.enjoysharedmeal.model.enums.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "feedback")
-public class Feedback {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Feedback extends BaseEntity {
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
@@ -30,9 +29,8 @@ public class Feedback {
     @Column(length = 500, nullable = false)
     private String comment;
 
-    @Min(1)
-    @Max(5)
-    private int vote;
+    @Enumerated
+    private Vote vote;
 
     @ManyToOne
     private Sharer sharer;
