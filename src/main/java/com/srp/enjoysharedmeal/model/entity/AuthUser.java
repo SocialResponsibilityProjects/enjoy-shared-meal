@@ -1,11 +1,13 @@
 package com.srp.enjoysharedmeal.model.entity;
 
 import com.srp.enjoysharedmeal.model.type.Role;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,9 +17,11 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 @MappedSuperclass
-public class AuthUser {
+public abstract class AuthUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +32,11 @@ public class AuthUser {
     private String username;
 
     @Size(min = 5, message = "Minimum password length: 5 characters")
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @Column(nullable = false)
     private List<Role> roles;
 
 }
