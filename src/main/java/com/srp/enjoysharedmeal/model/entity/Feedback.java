@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -35,9 +38,12 @@ public class Feedback {
     @Column(nullable = false)
     private int score;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "sharer_id", referencedColumnName = "id")
     @Column(nullable = false)
     private User sharedBy;
+
+    // TODO : needs to add related post - ManyToOne
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
