@@ -34,10 +34,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@RequestBody @Valid UserRegisterDTO userDataDTO) {
-        User user = new User();
-        user.setUsername(userDataDTO.getUsername());
-        user.setPassword(userDataDTO.getPassword());
-        return userService.signup(user, false);
+        return userService.signup(userDataDTO, false);
     }
 
     @DeleteMapping(value = "/delete/{username}")

@@ -12,12 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.sound.midi.Receiver;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,21 +31,22 @@ public class Feedback {
     @Column(length = 500, nullable = false)
     private String comment;
 
-    @Min(1)
-    @Max(5)
+    @Size(min = 1, max = 5)
+    @Column(nullable = false)
     private int score;
 
     @OneToOne
+    @Column(nullable = false)
     private User sharedBy;
 
     @CreationTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "updated_at", updatable = false, nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
 }
