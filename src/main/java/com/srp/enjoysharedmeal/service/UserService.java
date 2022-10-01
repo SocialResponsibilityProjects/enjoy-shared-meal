@@ -1,5 +1,6 @@
 package com.srp.enjoysharedmeal.service;
 
+import com.srp.enjoysharedmeal.model.dto.UserRegisterDTO;
 import com.srp.enjoysharedmeal.model.entity.AuthUser;
 import com.srp.enjoysharedmeal.model.entity.User;
 import com.srp.enjoysharedmeal.model.type.Role;
@@ -41,9 +42,13 @@ public class UserService {
         }
     }
 
-    public String signup(User user, boolean isAdmin) {
-        if (!userRepository.existsByUsername(user.getUsername())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public String signup(UserRegisterDTO registrationUser, boolean isAdmin) {
+        if (!userRepository.existsByUsername(registrationUser.getUsername())) {
+            User user = new User();
+            user.setUsername(registrationUser.getUsername());
+            user.setPassword(passwordEncoder.encode(registrationUser.getPassword()));
+            user.setEmail(registrationUser.getEmail());
+            user.setPhoneNumber(registrationUser.getPhone());
             Role role = isAdmin ? Role.ROLE_ADMIN : Role.ROLE_CLIENT;
             user.setRoles(Collections.singletonList(role));
             userRepository.save(user);
