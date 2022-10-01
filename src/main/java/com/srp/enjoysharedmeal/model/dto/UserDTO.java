@@ -1,6 +1,6 @@
 package com.srp.enjoysharedmeal.model.dto;
 
-import com.sakinr.patika.airportreservationsystem.model.entity.Role;
+import com.srp.enjoysharedmeal.model.type.Role;
 import lombok.Data;
 
 import java.util.List;
