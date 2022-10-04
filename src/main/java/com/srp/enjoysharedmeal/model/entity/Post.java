@@ -9,23 +9,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "location")
-public class Location {
+@Table(name = "post")
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private double latitude;
+    private String title;
 
+    @Column(length = 600)
+    private String details;
+
+    @OneToOne
     @Column(nullable = false)
-    private double longitude;
+    private Food food;
+
+    @OneToOne
+    @Column(nullable = false)
+    private User sharedBy;
+
+    @OneToOne
+    @Column(nullable = false)
+    private Location sharedFrom;
+
+    @OneToMany
+    private List<Feedback> feedbacks;
 
 }

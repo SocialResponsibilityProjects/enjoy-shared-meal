@@ -5,11 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
-import javax.sound.midi.Receiver;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,28 +26,33 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "feedback")
 public class Feedback {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @Column(name = "feedback_time", updatable = false, nullable = false)
-    private LocalDateTime feedbackTime;
-
     @Column(length = 500, nullable = false)
     private String comment;
 
-    @Min(1)
-    @Max(5)
-    private int vote;
+    @Size(min = 1, max = 5)
+    @Column(nullable = false)
+    private int score;
 
-    @ManyToOne
-    private Sharer sharer;
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "sharer_id", referencedColumnName = "id")
+    @Column(nullable = false)
+    private User sharedBy;
 
-    @ManyToOne
-    private Receiver receiver;
+    // TODO : needs to add related post - ManyToOne
 
-    @ManyToOne
-    private Food food;
+    @CreationTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
 }

@@ -1,34 +1,32 @@
 package com.srp.enjoysharedmeal.model.entity;
 
-import com.srp.enjoysharedmeal.model.base.BaseUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.List;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "sharer")
-public class Sharer extends BaseUser {
+public class User extends AuthUser {
+
     @Pattern(regexp = "(05)([0-9]{2})\\s?([0-9]{3})\\s?([0-9]{2})\\s?([0-9]{2})")
     @Column(unique = true)
     @NotBlank(message = "Phone number cannot be blank")
     private String phoneNumber;
 
-    @OneToOne
-    private Location location;
-
-    @OneToMany
-    private List<Food> sharedFoods;
-
-    @OneToMany
-    private List<Feedback> feedbacks;
+    @Email
+    @Column(unique = true, nullable = false)
+    private String email;
 
 }
