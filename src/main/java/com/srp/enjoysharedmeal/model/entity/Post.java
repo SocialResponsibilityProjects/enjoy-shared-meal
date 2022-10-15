@@ -1,18 +1,28 @@
 package com.srp.enjoysharedmeal.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.srp.enjoysharedmeal.model.type.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,20 +38,31 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
-    @Column(length = 600)
+    @Column(nullable = false)
     private String details;
 
-    @OneToOne
-    @Column(nullable = false)
-    private Food food;
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Food> foods = new HashSet<>();
 
-    @OneToOne
+    @ElementCollection
+    @Column(nullable = false)
+    private List<String> photos;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     @Column(nullable = false)
     private User sharedBy;
 
-    @OneToOne
-    @Column(nullable = false)
-    private Location sharedFrom;
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    private Location location;
 
     @OneToMany
     private List<Feedback> feedbacks;
